@@ -26,7 +26,7 @@ func NewAuth() {
 	googleClientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
 	googleRedirectURL := os.Getenv("GOOGLE_REDIRECT_URI")
 
-	// Google OAuth プロバイダの初期化
+	// Google OAuthプロバイダの初期化
 	goth.UseProviders(
 		google.New(googleClientID, googleClientSecret, googleRedirectURL, "email", "profile"),
 	)

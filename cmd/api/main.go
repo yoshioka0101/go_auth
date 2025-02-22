@@ -11,7 +11,6 @@ func main() {
 	// 認証の初期化
 	auth.NewAuth()
 
-	// ルーターを生成する
 	r := routes.NewRouter()
 
 	// サーバーの起動
