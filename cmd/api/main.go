@@ -1,17 +1,22 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
+	"log"
+
+	"github.com/yoshioka0101/go_auth/internal/auth"
+	"github.com/yoshioka0101/go_auth/internal/routes"
 )
 
-
 func main() {
-	engine:= gin.Default()
-	engine.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "hello world",
-		})
-	})
-	engine.Run(":4000")
+	// 認証の初期化
+	auth.NewAuth()
+
+	// ルーターを生成する
+	r := routes.NewRouter()
+
+	// サーバーの起動
+	log.Println("Starting server on :4000")
+	if err := r.Run(":4000"); err != nil {
+		log.Fatalf("Server failed to start: %v", err)
+	}
 }
