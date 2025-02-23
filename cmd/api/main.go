@@ -14,8 +14,8 @@ func main() {
 	r := routes.NewRouter()
 
 	// サーバーの起動
-	log.Println("Starting server on :4000")
-	if err := r.Run(":4000"); err != nil {
+	log.Println("Starting server on :8080")
+	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 }

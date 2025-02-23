@@ -12,9 +12,9 @@ func NewRouter() *gin.Engine {
 	r.GET("/", handler.HelloWorldHandler)
 
 	// 認証関連のエンドポイント
-	 r.GET("/auth/google", handler.GoogleAuthHandler)
-	 r.GET("/auth/google/callback", handler.GetAuthCallbackHandler)
-	 r.POST("/auth/logout", handler.LogoutHandler)
+	r.GET("/auth/google", handler.GoogleAuthHandler)
+	r.GET("/auth/google/callback", handler.GetAuthCallbackHandler)
+	r.POST("/auth/logout", handler.LogoutHandler)
 
 	return r
 }
