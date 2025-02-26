@@ -17,7 +17,7 @@ func HelloWorldHandler(c *gin.Context) {
 func GoogleAuthHandler(c *gin.Context) {
 	c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "provider", "google"))
 	gothic.BeginAuthHandler(c.Writer, c.Request)
-	c.JSON(http.StatusOK, gin.H{"message": "auth/google成功したぜ"})
+	// c.JSON(http.StatusOK, gin.H{"message": "auth/google成功したぜ"})
 }
 
 // Google OAuth コールバックのハンドラー
@@ -34,7 +34,9 @@ func GetAuthCallbackHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"user": user})
+
+	// 認証成功後、フロントエンドのダッシュボードへリダイレクト
+	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/dashboard")
 }
 
 // LogoutHandler - セッション削除のハンドラー
