@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/yoshioka0101/go_auth/internal/auth"
-	"github.com/yoshioka0101/go_auth/internal/routes"
+	"github.com/yoshioka0101/go_auth/backend/internal/auth"
+	"github.com/yoshioka0101/go_auth/backend/internal/routes"
 )
 
 func main() {
