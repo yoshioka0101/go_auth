@@ -3,7 +3,7 @@ package routes
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/yoshioka0101/go_auth/internal/handler"
+	"github.com/yoshioka0101/go_auth/backend/internal/handler"
 )
 
 func NewRouter() *gin.Engine {
@@ -23,6 +23,7 @@ func NewRouter() *gin.Engine {
 	// 認証関連のエンドポイント
 	r.GET("/auth/google", handler.GoogleAuthHandler)
 	r.GET("/auth/google/callback", handler.GetAuthCallbackHandler)
+	r.GET("/auth/session", handler.SessionHandler)
 	r.POST("/auth/logout", handler.LogoutHandler)
 
 	return r

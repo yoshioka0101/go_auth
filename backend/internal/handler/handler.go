@@ -6,6 +6,7 @@ import (
 
 	"github.com/markbates/goth/gothic"
 	"github.com/gin-gonic/gin"
+	
 )
 
 // HelloWorldHandler は "Hello World" を返すハンドラ
@@ -17,12 +18,10 @@ func HelloWorldHandler(c *gin.Context) {
 func GoogleAuthHandler(c *gin.Context) {
 	c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "provider", "google"))
 	gothic.BeginAuthHandler(c.Writer, c.Request)
-	// c.JSON(http.StatusOK, gin.H{"message": "auth/google成功したぜ"})
 }
 
 // Google OAuth コールバックのハンドラー
 func GetAuthCallbackHandler(c *gin.Context) {
-	// プロバイダーがクエリパラメータに含まれていない場合、"google" を追加する
 	if c.Query("provider") == "" {
 		q := c.Request.URL.Query()
 		q.Set("provider", "google")
@@ -35,11 +34,40 @@ func GetAuthCallbackHandler(c *gin.Context) {
 		return
 	}
 
-	// 認証成功後、フロントエンドのダッシュボードへリダイレクト
-	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:3000/dashboard")
+	// セッションにユーザー情報を保存
+	session, _ := gothic.Store.Get(c.Request, "_gothic_session")
+	session.Values["user"] = gin.H{
+		"name":   user.Name,
+		"email":  user.Email,
+		"avatar": user.AvatarURL,
+	}
+	session.Save(c.Request, c.Writer)
+
+	// 認証成功メッセージをJSONで返す
+	c.JSON(http.StatusOK, gin.H{"message": "login成功しました！"})
+}
+
+// SessionHandler - セッション情報を取得する
+func SessionHandler(c *gin.Context) {
+	session, _ := gothic.Store.Get(c.Request, "_gothic_session")
+	user, exists := session.Values["user"]
+
+	if !exists {
+		c.JSON(http.StatusOK, gin.H{"authenticated": false})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"authenticated": true,
+		"user":          user,
+	})
 }
 
 // LogoutHandler - セッション削除のハンドラー
 func LogoutHandler(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"message": "Logged out"})
+    // auth_token Cookieを削除
+    c.SetCookie("auth_token", "", -1, "/", "localhost", false, true)
+
+    // ログアウト成功のメッセージを返す
+    c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
